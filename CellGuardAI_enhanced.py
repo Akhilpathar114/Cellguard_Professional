@@ -9,6 +9,30 @@ from sklearn.ensemble import IsolationForest
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LinearRegression
 import io, re
+# --- HOTFIX: ensure ensure_cols_exist exists (temporary) ---
+import numpy as np
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("CellGuardAI_hotfix")
+logger.info("Applying hotfix for ensure_cols_exist (temporary)")
+
+if "ensure_cols_exist" not in globals():
+    def ensure_cols_exist(df, needed):
+        """
+        Defensive fallback: add missing columns with NaN.
+        Temporary — restore real implementation later.
+        """
+        for c in needed:
+            if c not in df.columns:
+                df[c] = np.nan
+        return df
+
+# Optional quick debug (comment out if noisy)
+try:
+    import streamlit as st
+    st.write("DEBUG: ensure_cols_exist present:", "ensure_cols_exist" in globals())
+except Exception:
+    print("DEBUG: ensure_cols_exist present:", "ensure_cols_exist" in globals())
 
 st.set_page_config(page_title="CellGuard.Ai - Dashboard", layout="wide")
 
